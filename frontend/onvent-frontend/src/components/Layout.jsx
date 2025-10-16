@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
     <div>
       <nav className="navbar">
         <div className="nav-brand">
-          <Link to="/">Onvent</Link>
+          <NavLink to="/">Onvent</NavLink>
         </div>
         <ul className="nav-links">
-          <li><Link to="/users">User List</Link></li>
-          <li><Link to="/events">Events</Link></li>
-          <li><Link to="/tickets">Tickets</Link></li>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/test">API Test</Link></li>
-          <li><Link to="/crud-test">CRUD Test</Link></li>
+          <li><NavLink to="/users">User List</NavLink></li>
+          <li><NavLink to="/events">Events</NavLink></li>
+          <li><NavLink to="/tickets">Tickets</NavLink></li>
+          <li><NavLink to="/register">Register</NavLink></li>
+          <li><NavLink to="/login">Login</NavLink></li>
+          <li><NavLink to="/test">API Test</NavLink></li>
+          <li><NavLink to="/crud-test">CRUD Test</NavLink></li>
         </ul>
       </nav>
       <main className="main-content">
