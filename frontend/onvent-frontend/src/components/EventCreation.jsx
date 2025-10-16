@@ -12,6 +12,7 @@ const EventCreation = () => {
     organizer: { id: '' }
   });
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +36,7 @@ const EventCreation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       // Format the event data
       const eventData = {
@@ -56,13 +58,19 @@ const EventCreation = () => {
       });
     } catch (error) {
       setMessage('Error creating event: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="event-form">
       <h2>Create Event</h2>
-      {message && <div className="message">{message}</div>}
+      {message && (
+        <div className={message.includes('successfully') ? 'message' : 'error'}>
+          {message}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="title">Title:</label>
@@ -73,6 +81,7 @@ const EventCreation = () => {
             value={event.title}
             onChange={handleChange}
             required
+            placeholder="Enter event title"
           />
         </div>
         <div className="form-group">
@@ -83,6 +92,7 @@ const EventCreation = () => {
             value={event.description}
             onChange={handleChange}
             rows="4"
+            placeholder="Describe your event"
           />
         </div>
         <div className="form-group">
@@ -94,6 +104,7 @@ const EventCreation = () => {
             value={event.location}
             onChange={handleChange}
             required
+            placeholder="Enter event location"
           />
         </div>
         <div className="form-group">
@@ -108,7 +119,7 @@ const EventCreation = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="price">Price:</label>
+          <label htmlFor="price">Price ($):</label>
           <input
             type="number"
             id="price"
@@ -118,6 +129,7 @@ const EventCreation = () => {
             step="0.01"
             min="0"
             required
+            placeholder="0.00"
           />
         </div>
         <div className="form-group">
@@ -130,6 +142,7 @@ const EventCreation = () => {
             onChange={handleChange}
             min="1"
             required
+            placeholder="Enter maximum number of attendees"
           />
         </div>
         <div className="form-group">
@@ -141,9 +154,12 @@ const EventCreation = () => {
             value={event.organizer.id}
             onChange={handleChange}
             required
+            placeholder="Enter organizer ID"
           />
         </div>
-        <button type="submit">Create Event</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Creating Event...' : 'Create Event'}
+        </button>
       </form>
     </div>
   );
