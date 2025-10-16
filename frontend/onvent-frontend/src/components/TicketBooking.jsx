@@ -9,6 +9,7 @@ const TicketBooking = () => {
     event: { id: '' }
   });
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +38,7 @@ const TicketBooking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       // Format the ticket data
       const ticketData = {
@@ -56,13 +58,19 @@ const TicketBooking = () => {
       });
     } catch (error) {
       setMessage('Error booking ticket: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="ticket-form">
       <h2>Book Ticket</h2>
-      {message && <div className="message">{message}</div>}
+      {message && (
+        <div className={message.includes('successfully') ? 'message' : 'error'}>
+          {message}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="purchaseDate">Purchase Date:</label>
@@ -83,6 +91,7 @@ const TicketBooking = () => {
             name="ticketCode"
             value={ticket.ticketCode}
             onChange={handleChange}
+            placeholder="Leave blank to auto-generate"
           />
         </div>
         <div className="form-group">
@@ -94,6 +103,7 @@ const TicketBooking = () => {
             value={ticket.user.id}
             onChange={handleChange}
             required
+            placeholder="Enter user ID"
           />
         </div>
         <div className="form-group">
@@ -105,9 +115,12 @@ const TicketBooking = () => {
             value={ticket.event.id}
             onChange={handleChange}
             required
+            placeholder="Enter event ID"
           />
         </div>
-        <button type="submit">Book Ticket</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Booking Ticket...' : 'Book Ticket'}
+        </button>
       </form>
     </div>
   );
