@@ -16,6 +16,10 @@ public class Ticket {
     @Column(name = "ticket_code", nullable = false, unique = true)
     private String ticketCode;
     
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status = TicketStatus.ACTIVE;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -23,6 +27,11 @@ public class Ticket {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
+    
+    // Enum for ticket status
+    public enum TicketStatus {
+        ACTIVE, CANCELLED
+    }
     
     // Default constructor
     public Ticket() {}
@@ -33,6 +42,7 @@ public class Ticket {
         this.ticketCode = ticketCode;
         this.user = user;
         this.event = event;
+        this.status = TicketStatus.ACTIVE;
     }
     
     // Getters and Setters
@@ -74,5 +84,13 @@ public class Ticket {
     
     public void setEvent(Event event) {
         this.event = event;
+    }
+    
+    public TicketStatus getStatus() {
+        return status;
+    }
+    
+    public void setStatus(TicketStatus status) {
+        this.status = status;
     }
 }
