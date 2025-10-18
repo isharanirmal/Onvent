@@ -8,6 +8,7 @@ import EventCreation from './components/EventCreation';
 import EventList from './components/EventList';
 import TicketBooking from './components/TicketBooking';
 import TicketView from './components/TicketView';
+import UserDashboard from './components/UserDashboard';
 import ApiTest from './components/ApiTest';
 import FullCRUDTest from './components/FullCRUDTest';
 import './App.css';
@@ -25,6 +26,7 @@ function App() {
           <Route path="events" element={<EventList />} />
           <Route path="tickets/book" element={<TicketBooking />} />
           <Route path="tickets" element={<TicketView />} />
+          <Route path="dashboard" element={<UserDashboard />} />
           <Route path="test" element={<ApiTest />} />
           <Route path="crud-test" element={<FullCRUDTest />} />
         </Route>

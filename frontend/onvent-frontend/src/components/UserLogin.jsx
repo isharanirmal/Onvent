@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -6,6 +7,8 @@ const UserLogin = () => {
     password: ''
   });
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({
@@ -16,15 +19,30 @@ const UserLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     // In a real application, you would authenticate with your backend
-    setMessage('Login functionality would be implemented here');
-    console.log('Login attempt with:', credentials);
+    setTimeout(() => {
+      // Simulate successful login
+      localStorage.setItem('isLoggedIn', 'true');
+      setMessage('Login successful! Redirecting...');
+      console.log('Login attempt with:', credentials);
+      setIsLoading(false);
+      
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
+    }, 1000);
   };
 
   return (
     <div className="login-form">
       <h2>User Login</h2>
-      {message && <div className="message">{message}</div>}
+      {message && (
+        <div className={message.includes('successful') ? 'message' : 'error'}>
+          {message}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -35,6 +53,7 @@ const UserLogin = () => {
             value={credentials.email}
             onChange={handleChange}
             required
+            placeholder="Enter your email address"
           />
         </div>
         <div className="form-group">
@@ -46,9 +65,12 @@ const UserLogin = () => {
             value={credentials.password}
             onChange={handleChange}
             required
+            placeholder="Enter your password"
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
     </div>
   );
