@@ -23,15 +23,27 @@ public class UserController {
         try {
             User createdUser = userService.createUser(user);
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            System.err.println("Error creating user: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT); // 409 for conflicts
         } catch (Exception e) {
+            System.err.println("Unexpected error creating user: " + e.getMessage());
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        try {
+            List<User> users = userService.getAllUsers();
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error getting all users: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")

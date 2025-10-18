@@ -17,6 +17,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        // Check if user with the same email already exists
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("User with email " + user.getEmail() + " already exists");
+        }
         return userRepository.save(user);
     }
 
@@ -30,7 +34,7 @@ public class UserService {
 
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
@@ -41,7 +45,7 @@ public class UserService {
 
     public void deleteUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         
         userRepository.delete(user);
     }
